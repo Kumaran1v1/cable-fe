@@ -137,13 +137,13 @@ export const Login: React.FC = () => {
             sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
           >
             <TextField
-              label="Email / Username"
+              label="Email or Mobile Number"
               variant="outlined"
               fullWidth
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               disabled={loading}
-              placeholder="admin@cable.com"
+              placeholder="admin@cable.com or 9876543210"
               slotProps={{
                 input: {
                   startAdornment: (

@@ -41,7 +41,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         <IconButton
           color="inherit"
           edge="start"
-          onClick={onToggleSidebar}
+          onClick={(e) => {
+            e.currentTarget.blur();
+            onToggleSidebar();
+          }}
           sx={{ mr: 2 }}
         >
           <MenuIcon />

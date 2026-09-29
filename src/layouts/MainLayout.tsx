@@ -35,7 +35,8 @@ export const MainLayout: React.FC = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, md: 3 },
+          p: { xs: 0.5, sm: 1.5, md: 3 },
+          pt: 0,
           width: { md: `calc(100% - ${SIDEBAR_WIDTH}px)` },
           minHeight: "100vh",
           display: "flex",
@@ -45,10 +46,10 @@ export const MainLayout: React.FC = () => {
         }}
       >
         {/* Spacer for sticky header */}
-        <Toolbar />
+        <Toolbar sx={{ minHeight: "56px !important" }} />
 
         {/* Dynamic Nested Page Content */}
-        <Box sx={{ flexGrow: 1, py: 1 }}>
+        <Box sx={{ flexGrow: 1, py: { xs: 0.5, sm: 1 } }}>
           <Outlet />
         </Box>
       </Box>

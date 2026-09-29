@@ -10,11 +10,12 @@ import {
   Avatar,
   Tooltip,
 } from "@mui/material";
-import { LogOut, Menu as MenuIcon, Sun, Moon, Layers } from "lucide-react";
+import { LogOut, Menu as MenuIcon, Sun, Moon, Layers, User as UserIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routeConstants";
 import { useAuth } from "../context/AuthContext";
 import { useThemeMode } from "../context/ThemeContext";
+import ProfileModal from "../components/ProfileModal";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -25,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
   const { mode, toggleTheme } = useThemeMode();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   const userName = user?.name || "Admin User";
   const userEmail = user?.email || "";
@@ -82,7 +84,10 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            onClick={onToggleSidebar}
+            onClick={(e) => {
+              e.currentTarget.blur();
+              onToggleSidebar();
+            }}
             sx={{
               mr: 0.5,
               display: { md: "none" },
@@ -144,6 +149,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               sx={{ ml: 0.5 }}
             >
               <Avatar
+                src={(user?.profileImage as string) || undefined}
                 sx={{
                   bgcolor: "primary.main",
                   width: 32,
@@ -153,7 +159,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                   border: "2px solid #0d9488",
                 }}
               >
-                {getInitials(userName)}
+                {!user?.profileImage && getInitials(userName)}
               </Avatar>
             </IconButton>
           </Tooltip>
@@ -229,6 +235,19 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                 {userRole}
               </Typography>
             </Box>
+
+            {/* My Profile Action */}
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                setProfileModalOpen(true);
+              }}
+              sx={{ gap: 1.5, py: 1, fontSize: "0.875rem" }}
+            >
+              <UserIcon size={16} style={{ color: "#0d9488" }} />
+              <Typography variant="body2">My Profile</Typography>
+            </MenuItem>
+
             <MenuItem
               onClick={handleLogout}
               sx={{ gap: 1.5, py: 1, color: "error.main", fontSize: "0.875rem" }}
@@ -237,6 +256,12 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               <Typography variant="body2">Sign Out</Typography>
             </MenuItem>
           </Menu>
+
+          {/* Profile & Settings Modal */}
+          <ProfileModal
+            open={profileModalOpen}
+            onClose={() => setProfileModalOpen(false)}
+          />
         </Box>
       </Toolbar>
     </AppBar>

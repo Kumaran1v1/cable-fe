@@ -7,8 +7,12 @@ export interface User {
   _id?: string;
   name?: string;
   email?: string;
-  role?: string;
+  mobile?: string;
   companyName?: string;
+  age?: number;
+  gender?: "male" | "female" | "other" | "";
+  profileImage?: string;
+  role?: string;
   [key: string]: unknown;
 }
 
@@ -16,6 +20,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   login: (token: string, user: User) => void;
+  updateUser: (userData: User) => void;
   logout: () => Promise<void>;
 }
 
@@ -23,6 +28,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   user: null,
   login: () => {},
+  updateUser: () => {},
   logout: async () => {},
 });
 
@@ -41,6 +47,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
     setIsAuthenticated(true);
+  }, []);
+
+  const updateUser = useCallback((userData: User) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
   }, []);
 
   const logout = useCallback(async () => {
@@ -66,7 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [logout]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, updateUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

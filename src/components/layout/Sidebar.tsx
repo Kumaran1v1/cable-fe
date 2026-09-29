@@ -76,7 +76,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       variant="temporary"
       open={open}
       onClose={onClose}
-      ModalProps={{ keepMounted: true }}
+      ModalProps={{
+        keepMounted: true,
+        disableRestoreFocus: true,
+      }}
       sx={{
         "& .MuiDrawer-paper": {
           boxSizing: "border-box",

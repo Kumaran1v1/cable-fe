@@ -99,7 +99,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           return (
             <ListItemButton
               key={item.path}
-              onClick={() => handleNavigation(item.path)}
+              onClick={(e) => {
+                e.currentTarget.blur();
+                handleNavigation(item.path);
+              }}
               sx={{
                 borderRadius: 2,
                 mb: 0.5,
@@ -152,7 +155,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         variant="temporary"
         open={mobileOpen}
         onClose={onToggleSidebar}
-        ModalProps={{ keepMounted: true }}
+        ModalProps={{
+          keepMounted: true,
+          disableRestoreFocus: true,
+        }}
         sx={{
           display: { xs: "block", md: "none" },
           "& .MuiDrawer-paper": {
