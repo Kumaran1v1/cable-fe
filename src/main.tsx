@@ -46,8 +46,12 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
 
   const response = await originalFetch(targetInput, init);
 
-  // If response is 401 Unauthorized (and not login attempt), session has expired
-  if (response.status === 401 && !urlStr.includes("/api/auth/login")) {
+  // If response is 401 Unauthorized (and not login/logout attempt), session has expired
+  if (
+    response.status === 401 &&
+    !urlStr.includes("/api/auth/login") &&
+    !urlStr.includes("/api/auth/logout")
+  ) {
     const existingToken = localStorage.getItem("token");
     if (existingToken) {
       localStorage.removeItem("token");

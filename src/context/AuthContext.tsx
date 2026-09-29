@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 
+import { authService } from "../services/auth.service";
+
 export interface User {
   id?: string;
   _id?: string;
@@ -14,14 +16,14 @@ interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   login: (token: string, user: User) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   user: null,
   login: () => {},
-  logout: () => {},
+  logout: async () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -41,11 +43,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthenticated(true);
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    setIsAuthenticated(false);
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } catch (err) {
+      console.warn("Logout API call error:", err);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUser(null);
+      setIsAuthenticated(false);
+    }
   }, []);
 
   useEffect(() => {

@@ -17,14 +17,22 @@ interface NavbarProps {
   onToggleSidebar: () => void;
 }
 
+import { authService } from "../../services/auth.service";
+
 export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (err) {
+      console.warn("Logout error:", err);
+    } finally {
+      dispatch(logout());
+      navigate("/login");
+    }
   };
 
   return (
