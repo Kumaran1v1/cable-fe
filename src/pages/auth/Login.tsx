@@ -109,7 +109,7 @@ export const Login: React.FC = () => {
                 mb: 0.5,
               }}
             >
-              Portal Login
+              Login
             </Typography>
             <Typography variant="body2" color="#94a3b8">
               Sign in to manage your network and collections
@@ -143,7 +143,7 @@ export const Login: React.FC = () => {
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               disabled={loading}
-              placeholder="admin@cable.com or 9876543210"
+              placeholder="Enter your email or phone number"
               slotProps={{
                 input: {
                   startAdornment: (
