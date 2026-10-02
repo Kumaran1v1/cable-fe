@@ -37,7 +37,11 @@ export const Login: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const loginEndpoint = import.meta.env.VITE_API_URL
+        ? `${import.meta.env.VITE_API_URL}/auth/login`
+        : "/api/auth/login";
+
+      const response = await fetch(loginEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier, password }),
